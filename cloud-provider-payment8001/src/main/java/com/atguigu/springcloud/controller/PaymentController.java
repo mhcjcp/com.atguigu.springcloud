@@ -1,11 +1,10 @@
 package com.atguigu.springcloud.controller;
 
-import com.atguigu.springcloud.dao.PaymentDao;
 import com.atguigu.springcloud.entities.CommonResult;
 import com.atguigu.springcloud.entities.Payment;
 import com.atguigu.springcloud.service.serviceImpl.PaymentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,8 +23,9 @@ public class PaymentController {
     @Resource
     private PaymentServiceImpl paymentService;
 
-    @PostMapping("/payment/creat")
-    public CommonResult creat(Payment payment){
+    @PostMapping("/payment/create")
+    public CommonResult create(@RequestBody Payment payment){ //此时通过postman直接访问8001端口报错，原因是此时接收的数据是json 而？serial=xxx这种格式并不支持，所以报错
+        log.info("payment是：{}",payment);
         int result = paymentService.creat(payment);
 //        log.info("*******"+result);
         log.info("**********插入结果：{}",result);
@@ -39,7 +39,7 @@ public class PaymentController {
     public CommonResult getPaymentById(@PathVariable("id") Long id){
         Payment payment= paymentService.getPaymentById(id);
 //        log.info("*******"+result);
-        log.info("**********查询结果：{}",payment);
+        log.info("**********查询结果是：{}",payment);
         if (payment!=null){
             return new CommonResult<>(200,"查询成功",payment);
         }
